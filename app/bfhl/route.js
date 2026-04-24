@@ -9,6 +9,13 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
+export async function GET() {
+  return NextResponse.json(
+    { status: "ok", message: "POST /bfhl to analyse node hierarchies" },
+    { status: 200, headers: CORS }
+  );
+}
+
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: CORS });
 }
