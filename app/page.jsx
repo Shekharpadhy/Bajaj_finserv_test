@@ -2,11 +2,12 @@
 import { useState, useRef } from "react";
 import InputPanel from "@/components/InputPanel";
 import ResultPanel from "@/components/ResultPanel";
+import USPCards from "@/components/USPCards";
 
 export default function Home() {
-  const [result, setResult]   = useState(null);
-  const [error, setError]     = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [result, setResult]     = useState(null);
+  const [error, setError]       = useState(null);
+  const [loading, setLoading]   = useState(false);
   const resultsRef = useRef(null);
 
   async function handleSubmit(data) {
@@ -22,7 +23,6 @@ export default function Home() {
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const json = await res.json();
       setResult(json);
-      // Scroll to results on mobile
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
@@ -34,80 +34,133 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="relative min-h-screen flex flex-col overflow-x-hidden">
+
+      {/* ── Ambient orbs ── */}
+      <div className="orb w-[500px] h-[500px] top-[-200px] left-[-150px] opacity-20"
+        style={{ background: "radial-gradient(circle, #4f46e5 0%, transparent 70%)" }} />
+      <div className="orb w-[400px] h-[400px] top-[30%] right-[-150px] opacity-15"
+        style={{ background: "radial-gradient(circle, #7c3aed 0%, transparent 70%)" }} />
+      <div className="orb w-[300px] h-[300px] bottom-[10%] left-[20%] opacity-10"
+        style={{ background: "radial-gradient(circle, #2563eb 0%, transparent 70%)" }} />
 
       {/* ── Nav ── */}
-      <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
+      <header className="relative z-50 border-b border-white/5 bg-black/40 backdrop-blur-xl sticky top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600 shadow-lg shadow-indigo-900/50">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+            {/* Logo mark */}
+            <div className="relative flex items-center justify-center w-9 h-9">
+              <div className="absolute inset-0 rounded-xl bg-indigo-600 blur-md opacity-60" />
+              <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg">
+                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
             </div>
-            <div className="flex items-baseline gap-2">
-              <span className="font-bold text-white tracking-tight">BFHL</span>
-              <span className="hidden sm:block text-slate-500 text-sm">Node Hierarchy Analyser</span>
+            <div>
+              <span className="font-bold text-white tracking-tight text-lg leading-none block">BFHL</span>
+              <span className="text-slate-500 text-xs">Node Hierarchy Engine</span>
             </div>
           </div>
+
           <div className="flex items-center gap-3">
-            <code className="hidden sm:block text-xs text-slate-600 font-mono bg-slate-900 px-2 py-1 rounded-lg border border-slate-800">
+            <code className="hidden md:block text-xs text-slate-500 font-mono bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/8">
               POST /bfhl
             </code>
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-xs font-medium">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               API Live
-            </span>
+            </div>
           </div>
         </div>
       </header>
 
       {/* ── Hero ── */}
-      <div className="border-b border-slate-800/50"
-        style={{ background: "linear-gradient(135deg, #0a0a14 0%, #0e0b1f 50%, #0a0a14 100%)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="px-2.5 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-indigo-400 text-xs font-medium tracking-wide">
-              SRM Engineering Challenge · Round 1
+      <section className="relative z-10 grid-bg border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-14">
+
+          {/* Badge */}
+          <div className="flex mb-6">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold tracking-wide">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+              SRM Full Stack Engineering Challenge · Round 1
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 leading-tight">
-            Hierarchical Node{" "}
-            <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
-              Analyser
-            </span>
+
+          {/* Headline */}
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-5 max-w-3xl">
+            Analyse Node{" "}
+            <span className="shimmer-text">Hierarchies</span>
+            <br />in Milliseconds
           </h1>
-          <p className="text-slate-400 max-w-xl text-sm sm:text-base">
-            Submit directed edge relationships. The engine validates input, detects cycles,
-            constructs hierarchical trees, and computes depth — in milliseconds.
+          <p className="text-slate-400 text-base sm:text-lg max-w-xl leading-relaxed mb-10">
+            Submit directed edges, get back validated trees, detected cycles, computed depths,
+            and structured insights — through a single REST endpoint.
           </p>
+
+          {/* 3D USP Cards */}
+          <USPCards />
         </div>
-      </div>
+      </section>
 
-      {/* ── Main ── */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-8">
+      {/* ── Analyser ── */}
+      <section className="relative z-10 flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-10">
+        {/* Section label */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest px-3">
+            Live Analyser
+          </span>
+          <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-start">
-
-          {/* Left — Input (sticky on desktop) */}
+          {/* Input */}
           <div className="lg:sticky lg:top-24">
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-sm p-5 sm:p-6">
+            <div className="rounded-2xl glass p-5 sm:p-6">
               <InputPanel onSubmit={handleSubmit} loading={loading} />
             </div>
           </div>
 
-          {/* Right — Results */}
+          {/* Results */}
           <div ref={resultsRef} className="scroll-mt-24">
             <ResultPanel result={result} error={error} loading={loading} />
           </div>
         </div>
-      </main>
+      </section>
+
+      {/* ── Stats bar ── */}
+      <div className="relative z-10 border-t border-white/5 bg-black/30 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+            {[
+              { label: "Max Input Nodes", value: "50+" },
+              { label: "Response Time", value: "<3s" },
+              { label: "CORS", value: "Enabled" },
+              { label: "Edge Cases", value: "All handled" },
+            ].map((s) => (
+              <div key={s.label} className="text-center">
+                <p className="text-xl sm:text-2xl font-bold text-white">{s.value}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-slate-800/60 py-6 mt-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-xs text-slate-600">SRM Full Stack Engineering Challenge · Round 1</p>
+      <footer className="relative z-10 border-t border-white/5 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 rounded-md bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
+              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <span className="text-xs text-slate-600">BFHL · SRM Engineering Challenge</span>
+          </div>
           <p className="text-xs text-slate-700 font-mono">
-            shekharpadhy_06112005 &nbsp;·&nbsp; RA2311026010603
+            shekharpadhy_06112005 &nbsp;·&nbsp; RA2311026010603 &nbsp;·&nbsp; sp8270@srmist.edu.in
           </p>
         </div>
       </footer>
